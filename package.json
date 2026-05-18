@@ -1,0 +1,36 @@
+{
+  "name": "express-mvc",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "nodemon",
+    "build": "tsdown",
+    "start": "node dist/index.cjs",
+    "seed": "tsx prisma/seed.ts"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.8.0",
+    "@prisma/client": "^7.8.0",
+    "bcryptjs": "^3.0.3",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "express-handlebars": "^9.0.1",
+    "express-session": "^1.19.0",
+    "pg": "^8.20.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^3.0.0",
+    "@types/express": "^5.0.6",
+    "@types/express-handlebars": "^6.0.2",
+    "@types/express-session": "^1.19.0",
+    "@types/node": "^25.6.0",
+    "@types/pg": "^8.20.0",
+    "nodemon": "^3.1.14",
+    "prisma": "^7.8.0",
+    "ts-node": "^10.9.2",
+    "tsdown": "^0.21.10",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.3"
+  }
+}
