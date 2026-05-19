@@ -3,7 +3,7 @@ import { z } from 'zod'
 export const affiliateSchema = z.object({
     first_name: z.string().min(1, 'El nombre es requerido'),
     last_name: z.string().min(1, 'El apellido es requerido'),
-    email: z.string().email('El email no es válido'),
+    email: z.email('Email inválido'),
     membershipTypeId: z.coerce.number().int().positive('Debe seleccionar un tipo de membresía'),
 })
 

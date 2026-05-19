@@ -13,7 +13,12 @@ const viewsPath = path.join(__dirname, '..', 'views')
 app.engine('hbs', engine({
     extname: '.hbs',
     defaultLayout: 'main',
-    layoutsDir: path.join(viewsPath, 'layouts')
+    layoutsDir: path.join(viewsPath, 'layouts'),
+    helpers: {
+        eq: (a: unknown, b: unknown) => {
+            return a === b
+        }
+    }
 }))
 
 app.set('view engine', 'hbs')

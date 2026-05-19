@@ -1,0 +1,68 @@
+<div class="container mt-4" style="max-width: 600px;">
+  <a href="/affiliates/{{affiliate.id}}" class="btn btn-outline-secondary btn-sm mb-3">← Volver al detalle</a>
+
+  <h1 class="mb-4">Editar: {{affiliate.first_name}} {{affiliate.last_name}}</h1>
+
+  <form action="/affiliates/{{affiliate.id}}/edit" method="POST" class="card card-body">
+    <div class="mb-3">
+      <label for="first_name" class="form-label">Nombre</label>
+      <input
+        type="text"
+        id="first_name"
+        name="first_name"
+        class="form-control{{#if errors.first_name}} is-invalid{{/if}}"
+        value="{{affiliate.first_name}}"
+      >
+      {{#if errors.first_name}}
+        <div class="invalid-feedback">{{errors.first_name}}</div>
+      {{/if}}
+    </div>
+
+    <div class="mb-3">
+      <label for="last_name" class="form-label">Apellido</label>
+      <input
+        type="text"
+        id="last_name"
+        name="last_name"
+        class="form-control{{#if errors.last_name}} is-invalid{{/if}}"
+        value="{{affiliate.last_name}}"
+      >
+      {{#if errors.last_name}}
+        <div class="invalid-feedback">{{errors.last_name}}</div>
+      {{/if}}
+    </div>
+
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        class="form-control{{#if errors.email}} is-invalid{{/if}}"
+        value="{{affiliate.email}}"
+      >
+      {{#if errors.email}}
+        <div class="invalid-feedback">{{errors.email}}</div>
+      {{/if}}
+    </div>
+
+    <div class="mb-3">
+      <label for="membershipTypeId" class="form-label">Tipo de membresía</label>
+      <select
+        id="membershipTypeId"
+        name="membershipTypeId"
+        class="form-select{{#if errors.membershipTypeId}} is-invalid{{/if}}"
+      >
+        <option value="">Seleccionar...</option>
+        <option value="1" {{#if (eq affiliate.membershipTypeId 1)}}selected{{/if}}>Silver</option>
+        <option value="2" {{#if (eq affiliate.membershipTypeId 2)}}selected{{/if}}>Gold</option>
+        <option value="3" {{#if (eq affiliate.membershipTypeId 3)}}selected{{/if}}>Platinum</option>
+      </select>
+      {{#if errors.membershipTypeId}}
+        <div class="invalid-feedback">{{errors.membershipTypeId}}</div>
+      {{/if}}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+  </form>
+</div>

@@ -1,0 +1,96 @@
+<div class="container mt-4">
+  <h1 class="mb-4">Afiliados</h1>
+  <a href="/affiliates/create" class="btn btn-primary mb-3">+ Nuevo afiliado</a>
+
+  {{#if affiliates.length}}
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Nombre</th>
+          <th>Email</th>
+          <th>Membresía</th>
+          {{#if isAdmin}}<th>Usuario</th>{{/if}}
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each affiliates}}
+          <tr>
+            <td>{{this.id}}</td>
+            <td>{{this.first_name}} {{this.last_name}}</td>
+            <td>{{this.email}}</td>
+            <td>{{this.membershipType.name}}</td>
+            {{#if ../isAdmin}}<td>{{this.user.email}}</td>{{/if}}
+            <td>
+              {{#if this.status}}
+                <span class="badge bg-success">Activo</span>
+              {{else}}
+                <span class="badge bg-danger">Inactivo</span>
+              {{/if}}
+            </td>
+            <td class="d-flex gap-1">
+              <a href="/affiliates/{{this.id}}" class="btn btn-sm btn-outline-secondary">Ver</a>
+              <a href="/affiliates/{{this.id}}/edit" class="btn btn-sm btn-outline-warning">Editar</a>
+              {{#if this.status}}
+                <form action="/affiliates/{{this.id}}/deactivate" method="POST">
+                  <button type="submit" class="btn btn-sm btn-outline-danger">Desactivar</button>
+                </form>
+              {{else}}
+                <form action="/affiliates/{{this.id}}/activate" method="POST">
+                  <button type="submit" class="btn btn-sm btn-outline-success">Activar</button>
+                </form>
+              {{/if}}
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  {{else}}
+    <p class="text-muted">No hay afiliados todavía.</p>
+  {{/if}}
+
+  {{#if isAdmin}}
+    <hr class="my-5">
+    <h2 class="mb-4">Usuarios</h2>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Email</th>
+          <th>Rol</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each users}}
+          <tr>
+            <td>{{this.id}}</td>
+            <td>{{this.email}}</td>
+            <td><span class="badge bg-secondary">{{this.role}}</span></td>
+            <td>
+              {{#if this.status}}
+                <span class="badge bg-success">Activo</span>
+              {{else}}
+                <span class="badge bg-danger">Inactivo</span>
+              {{/if}}
+            </td>
+            <td>
+              {{#if this.status}}
+                <form action="/affiliates/user/{{this.id}}/deactivate" method="POST">
+                  <button type="submit" class="btn btn-sm btn-outline-danger">Desactivar</button>
+                </form>
+              {{else}}
+                <form action="/affiliates/user/{{this.id}}/activate" method="POST">
+                  <button type="submit" class="btn btn-sm btn-outline-success">Activar</button>
+                </form>
+              {{/if}}
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  {{/if}}
+</div>
