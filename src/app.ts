@@ -2,8 +2,8 @@ import express from 'express'
 import path from 'path'
 import {engine} from 'express-handlebars'
 import session from 'express-session'
-import productRouter from './routes/product.routes'
-import authRouter from './routes/product.routes'
+import productRouter from './routes/affiliate.routes'
+import authRouter from './routes/auth.routes'
 import { requireAuth } from './middleware/requireAuth'
 
 const app = express()
