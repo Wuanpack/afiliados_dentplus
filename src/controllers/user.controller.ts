@@ -1,3 +1,4 @@
+/// <reference path="../types/session.d.ts" />
 import { Request, Response } from 'express'
 import * as UserModel from '../models/user.model'
 

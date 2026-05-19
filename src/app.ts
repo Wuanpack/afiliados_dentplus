@@ -34,6 +34,6 @@ app.use((req, _res, next) => {
 
 app.get('/', (_req, res) => res.render('home'))
 app.use('/login', authRouter)
-app.use('/products', requireAuth, productRouter)
+app.use('/affiliates', requireAuth, productRouter)
 
 export default app

@@ -7,6 +7,6 @@ router.get('/', AuthController.loginForm)
 router.post('/', AuthController.loginAction)
 router.get('/register', AuthController.registerForm)
 router.post('/register', AuthController.registerAction)
-router.get('/logout', AuthController.logout)
+router.post('/logout', AuthController.logout)
 
 export default router

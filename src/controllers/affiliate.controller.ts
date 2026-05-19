@@ -1,3 +1,4 @@
+/// <reference path="../types/session.d.ts" />
 import { Request, Response } from 'express'
 import * as AffiliateModel from '../models/affiliate.model'
 import * as UserModel from '../models/user.model'
@@ -40,7 +41,7 @@ export const createAffiliateForm = (_req: Request, res: Response) => {
 export const createAffiliateAction = async (req: Request, res: Response) => {
     const result = affiliateSchema.safeParse(req.body)
     if (!result.success) {
-        return res.render('products/create', {
+        return res.render('affiliates/create', {
             errors: formatZodErrors(result.error),
             values: req.body,
         })
@@ -56,8 +57,8 @@ export const editAffiliateForm = async (req: Request, res: Response) => {
     const affiliate = role === 'ADMIN'
         ? await AffiliateModel.getByIdAdmin(id)
         : await AffiliateModel.getById(id, userId!)
-    if (!affiliate) return res.status(404).render('404', { message: 'Producto no encontrado' })
-    res.render('products/edit', { affiliate })
+    if (!affiliate) return res.status(404).render('404', { message: 'Afiliado no encontrado' })
+    res.render('affiliates/edit', { affiliate })
 
 }
 
@@ -99,7 +100,7 @@ export const activateAffiliateAction = async (req: Request, res: Response) => {
     const { userId } = req.session
     const id = parseInt(req.params.id as string)
     try{
-        await AffiliateModel.softDelete(id, userId!)
+        await AffiliateModel.activate(id, userId!)
         res.redirect('/affiliates')
     } catch {
         res.status(404).render('404', { message: 'Afiliado no encontrado '})
