@@ -3,7 +3,9 @@ import { Request, Response } from 'express'
 import bcrypt from 'bcryptjs'
 import * as UserModel from '../models/user.model'
 import { loginSchema, registerSchema } from '../schemas/auth.schemas'
+import { BCRYPT_ROUNDS } from '../lib/constants'
 import { formatZodErrors } from '../lib/parseError'
+import { isUniqueConstraintError } from '../lib/prismaErrors'
 
 export const loginForm = (_req: Request, res: Response) => {
   res.render('auth/login')
@@ -35,7 +37,7 @@ export const loginAction = async (req: Request, res: Response) => {
       values: req.body,
     })
   }
-  
+
   req.session.userId = user.id
   req.session.role = user.role
   res.redirect('/affiliates')
@@ -65,11 +67,21 @@ export const registerAction = async (req: Request, res: Response) => {
     })
   }
 
-  const hash = await bcrypt.hash(password, 10)
-  const user = await UserModel.create({ email, password: hash })
-  req.session.userId = user.id
-  req.session.role = user.role
-  res.redirect('/affiliates')
+  try {
+    const hash = await bcrypt.hash(password, BCRYPT_ROUNDS)
+    const user = await UserModel.create({ email, password: hash })
+    req.session.userId = user.id
+    req.session.role = user.role
+    res.redirect('/affiliates')
+  } catch (error) {
+    if (isUniqueConstraintError(error)) {
+      return res.render('auth/register', {
+        error: 'Este email ya está registrado',
+        values: req.body,
+      })
+    }
+    throw error
+  }
 }
 
 export const logout = (req: Request, res: Response) => {

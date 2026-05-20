@@ -4,22 +4,17 @@ import * as AffiliateModel from '../models/affiliate.model'
 import * as MembershipModel from '../models/membership.model'
 import * as UserModel from '../models/user.model'
 import { affiliateSchema } from '../schemas/affiliate.schemas'
+import { affiliateScope } from '../lib/affiliateScope'
 import { formatZodErrors } from '../lib/parseError'
 import { parseRouteId } from '../lib/parseParams'
 import { isUniqueConstraintError } from '../lib/prismaErrors'
 
-/** ADMIN: sin filtro por userId. USER: solo sus afiliados. */
-function affiliateScope(req: Request) {
-  const { userId, role } = req.session
-  const isAdmin = role === 'ADMIN'
-  return {
-    isAdmin,
-    scopeUserId: isAdmin ? undefined : userId!,
-  }
+const NOT_FOUND_AFFILIATE = 'Afiliado no encontrado'
+
+function notFoundAffiliate(res: Response) {
+  return res.status(404).render('404', { message: NOT_FOUND_AFFILIATE })
 }
 
-// Si es ADMIN, muestra los usuarios y los afiliados
-// Si es USER, muestra solo sus afiliados con userId
 export const index = async (req: Request, res: Response) => {
   const { isAdmin, scopeUserId } = affiliateScope(req)
 
@@ -34,12 +29,10 @@ export const index = async (req: Request, res: Response) => {
 export const showAffiliateById = async (req: Request, res: Response) => {
   const { scopeUserId } = affiliateScope(req)
   const id = parseRouteId(req.params.id)
-  if (id === null) {
-    return res.status(404).render('404', { message: 'Afiliado no encontrado' })
-  }
+  if (id === null) return notFoundAffiliate(res)
 
   const affiliate = await AffiliateModel.getById(id, scopeUserId)
-  if (!affiliate) return res.status(404).render('404', { message: 'Afiliado no encontrado' })
+  if (!affiliate) return notFoundAffiliate(res)
   res.render('affiliates/show', { affiliate })
 }
 
@@ -81,34 +74,28 @@ export const createAffiliateAction = async (req: Request, res: Response) => {
 export const editAffiliateForm = async (req: Request, res: Response) => {
   const { scopeUserId } = affiliateScope(req)
   const id = parseRouteId(req.params.id)
-  if (id === null) {
-    return res.status(404).render('404', { message: 'Afiliado no encontrado' })
-  }
+  if (id === null) return notFoundAffiliate(res)
 
   const [affiliate, membershipTypes] = await Promise.all([
     AffiliateModel.getById(id, scopeUserId),
     MembershipModel.getAll(),
   ])
 
-  if (!affiliate) return res.status(404).render('404', { message: 'Afiliado no encontrado' })
+  if (!affiliate) return notFoundAffiliate(res)
   res.render('affiliates/edit', { affiliate, membershipTypes })
 }
 
 export const editAffiliateAction = async (req: Request, res: Response) => {
   const { scopeUserId } = affiliateScope(req)
   const id = parseRouteId(req.params.id)
-  if (id === null) {
-    return res.status(404).render('404', { message: 'Afiliado no encontrado' })
-  }
+  if (id === null) return notFoundAffiliate(res)
 
   const membershipTypes = await MembershipModel.getAll()
   const result = affiliateSchema.safeParse(req.body)
 
   if (!result.success) {
     const affiliate = await AffiliateModel.getById(id, scopeUserId)
-    if (!affiliate) {
-      return res.status(404).render('404', { message: 'Afiliado no encontrado' })
-    }
+    if (!affiliate) return notFoundAffiliate(res)
     return res.render('affiliates/edit', {
       affiliate,
       errors: formatZodErrors(result.error),
@@ -122,42 +109,39 @@ export const editAffiliateAction = async (req: Request, res: Response) => {
   } catch (error) {
     if (isUniqueConstraintError(error)) {
       const affiliate = await AffiliateModel.getById(id, scopeUserId)
+      if (!affiliate) return notFoundAffiliate(res)
       return res.render('affiliates/edit', {
         affiliate,
         errors: { email: 'Este email ya está registrado' },
         membershipTypes,
       })
     }
-    res.status(404).render('404', { message: 'Afiliado no encontrado' })
+    return notFoundAffiliate(res)
   }
 }
 
 export const deactivateAffiliateAction = async (req: Request, res: Response) => {
   const { scopeUserId } = affiliateScope(req)
   const id = parseRouteId(req.params.id)
-  if (id === null) {
-    return res.status(404).render('404', { message: 'Afiliado no encontrado' })
-  }
+  if (id === null) return notFoundAffiliate(res)
 
   try {
     await AffiliateModel.softDelete(id, scopeUserId)
     res.redirect('/affiliates')
   } catch {
-    res.status(404).render('404', { message: 'Afiliado no encontrado' })
+    return notFoundAffiliate(res)
   }
 }
 
 export const activateAffiliateAction = async (req: Request, res: Response) => {
   const { scopeUserId } = affiliateScope(req)
   const id = parseRouteId(req.params.id)
-  if (id === null) {
-    return res.status(404).render('404', { message: 'Afiliado no encontrado' })
-  }
+  if (id === null) return notFoundAffiliate(res)
 
   try {
     await AffiliateModel.activate(id, scopeUserId)
     res.redirect('/affiliates')
   } catch {
-    res.status(404).render('404', { message: 'Afiliado no encontrado' })
+    return notFoundAffiliate(res)
   }
 }
