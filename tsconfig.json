@@ -6,9 +6,9 @@
     "outDir": "dist",
     "esModuleInterop": true,
     "strict": true,
-    "typeRoots": ["./node_modules/@types", "./src/types"],
+    "types": ["node"],
     "skipLibCheck": true
   },
-  "include": ["src/**/*", "src/types/**/*.d.ts"],
+  "include": ["src/**/*"],
   "exclude": ["tsdown.config.ts", "prisma/seed.ts"]
 }
