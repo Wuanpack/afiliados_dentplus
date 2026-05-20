@@ -1,47 +1,54 @@
 import prisma from '../lib/prisma'
 import type { Prisma } from '../generated/prisma/client'
 
-// getAll para los usuarios normales - solo sus afiliados
-export const getAll = async (userId: number) => {
-    return await prisma.affiliate.findMany({ where: { userId }})
+const affiliateInclude = {
+    membershipType: true,
+    user: true,
+} as const
+
+function affiliateWhere (id: number, userId?: number) {
+    return userId !== undefined ? { id, userId }: {id}
 }
 
-// getAll para obtener todos los afiliados en cuenta admin
-export const getAllAdmin = async () => {
-    return await prisma.affiliate.findMany({ include: {user: true, membershipType: true}})
+function listWhere (userId?: number) {
+    return userId !== undefined ? { userId }: {}
 }
 
-// getById - Sirve para usuarios normales
-export const getById = async (id: number, userId: number) => {
-    return await prisma.affiliate.findFirst({ where: {id, userId }})
-}
+export const getAll = (userId?: number) =>
+    prisma.affiliate.findMany({
+        where: listWhere(userId),
+        include: affiliateInclude,
+    })
 
-// getById - Sirve para admin
-export const getByIdAdmin = async (id: number) => {
-    return await prisma.affiliate.findFirst({ where: { id } })
-}
+export const getById = (id: number, userId?: number) =>
+    prisma.affiliate.findFirst({
+        where: affiliateWhere(id, userId),
+        include: { membershipType: true }
+    })
 
-// create - Crear un afiliado - Sirve para admin y usuarios normales
 export const create = async (data: Prisma.AffiliateUncheckedCreateInput) => {
     return await prisma.affiliate.create( {data} )
 }
 
-// update - Modificar un afiliado - Sirve para admin y usuarios normales
-export const update = async (id: number, userId: number, data: Omit<Prisma.AffiliateUncheckedCreateInput, 'userId'>) => {
-    return await prisma.affiliate.update({ where: { id, userId }, data})
-}
+export const update = (
+    id: number,
+    data: Omit<Prisma.AffiliateUncheckedCreateInput, 'userId'>,
+    userId?: number,
+) => 
+    prisma.affiliate.update({
+        where: affiliateWhere(id, userId),
+        data,
+    })
 
-// softDelete - Cambia el status (boolean) a false - Sirve para admin y usuarios normales
-export const softDelete = async (id: number, userId: number) => {
-    return await prisma.affiliate.update({ 
-        where: { id, userId }, 
-        data: { status: false } 
+export const setStatus = (id: number, status:boolean, userId?: number) =>
+    prisma.affiliate.update({
+        where: affiliateWhere(id, userId),
+        data: {status },
     })
-}
-// activate - Cambia el status (boolean) a true - Sirve para admin y usuarios normales
-export const activate = async (id: number, userId: number) => {
-    return await prisma.affiliate.update({ 
-        where: { id, userId }, 
-        data: { status: true } 
-    })
-}
+
+export const softDelete = (id:number, userId?: number) =>
+    setStatus(id, false, userId)
+
+export const activate = (id:number, userId?: number) =>
+    setStatus(id, true, userId)
+

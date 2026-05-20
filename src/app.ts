@@ -2,7 +2,7 @@ import express from 'express'
 import path from 'path'
 import {engine} from 'express-handlebars'
 import session from 'express-session'
-import productRouter from './routes/affiliate.routes'
+import affiliateRouter from './routes/affiliate.routes'
 import authRouter from './routes/auth.routes'
 import { requireAuth } from './middleware/requireAuth'
 
@@ -39,6 +39,6 @@ app.use((req, _res, next) => {
 
 app.get('/', (_req, res) => res.render('home'))
 app.use('/login', authRouter)
-app.use('/affiliates', requireAuth, productRouter)
+app.use('/affiliates', requireAuth, affiliateRouter)
 
 export default app

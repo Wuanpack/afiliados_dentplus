@@ -29,6 +29,13 @@ export const loginAction = async (req: Request, res: Response) => {
     })
   }
 
+  if (!user.status) {
+    return res.render('auth/login', {
+      error: 'Tu cuenta está desactivada. Contacta al administrador.',
+      values: req.body,
+    })
+  }
+  
   req.session.userId = user.id
   req.session.role = user.role
   res.redirect('/affiliates')
