@@ -6,7 +6,7 @@
   <div class="card">
     <div class="card-body">
       <p class="card-text"><strong>Email:</strong> {{affiliate.email}}</p>
-      <p class="card-text"><strong>Membresía:</strong> {{affiliate.membershipType.name}}</p>
+      <p class="card-text"><strong>Membresía:</strong> {{capitalize affiliate.membershipType.name}} ({{affiliate.membershipType.discount}} descuento)</p>
       <p class="card-text">
         <strong>Estado:</strong>
         {{#if affiliate.status}}

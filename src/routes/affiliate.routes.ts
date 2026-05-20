@@ -1,13 +1,14 @@
 import { Router } from 'express'
 import * as AffiliateController from '../controllers/affiliate.controller'
 import * as UserController from '../controllers/user.controller'
+import { requireAdmin } from '../middleware/requireAdmin'
 
 const router = Router()
 
 router.get('/', AffiliateController.index)
 router.get('/create', AffiliateController.createAffiliateForm)
-router.post('/user/:id/deactivate', UserController.deactivateUserAction)
-router.post('/user/:id/activate', UserController.activateUserAction)
+router.post('/user/:id/deactivate', requireAdmin, UserController.deactivateUserAction)
+router.post('/user/:id/activate', requireAdmin, UserController.activateUserAction)
 
 router.get('/:id', AffiliateController.showAffiliateById)
 router.post('/', AffiliateController.createAffiliateAction)
@@ -15,8 +16,5 @@ router.get('/:id/edit', AffiliateController.editAffiliateForm)
 router.post('/:id/edit', AffiliateController.editAffiliateAction)
 router.post('/:id/deactivate', AffiliateController.deactivateAffiliateAction)
 router.post('/:id/activate', AffiliateController.activateAffiliateAction)
-
-
-
 
 export default router

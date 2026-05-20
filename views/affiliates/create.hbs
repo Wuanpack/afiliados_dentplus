@@ -54,9 +54,11 @@
         class="form-select{{#if errors.membershipTypeId}} is-invalid{{/if}}"
       >
         <option value="">Seleccionar...</option>
-        <option value="1" {{#if (eq values.membershipTypeId "1")}}selected{{/if}}>Silver</option>
-        <option value="2" {{#if (eq values.membershipTypeId "2")}}selected{{/if}}>Gold</option>
-        <option value="3" {{#if (eq values.membershipTypeId "3")}}selected{{/if}}>Platinum</option>
+        {{#each membershipTypes}}
+          <option value="{{this.id}}" {{#if (eq ../values.membershipTypeId this.id)}}selected{{/if}}>
+            {{capitalize this.name}} ({{this.discount}} descuento)
+          </option>
+        {{/each}}
       </select>
       {{#if errors.membershipTypeId}}
         <div class="invalid-feedback">{{errors.membershipTypeId}}</div>

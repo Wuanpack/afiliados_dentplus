@@ -15,9 +15,9 @@ app.engine('hbs', engine({
     defaultLayout: 'main',
     layoutsDir: path.join(viewsPath, 'layouts'),
     helpers: {
-        eq: (a: unknown, b: unknown) => {
-            return a === b
-        }
+        eq: (a: unknown, b: unknown) => a == b,
+        capitalize: (value: string) =>
+            value ? value.charAt(0).toUpperCase() + value.slice(1) : '',
     }
 }))
 
