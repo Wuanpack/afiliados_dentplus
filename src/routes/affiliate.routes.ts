@@ -11,6 +11,7 @@ router.post('/user/:id/deactivate', requireAdmin, UserController.deactivateUserA
 router.post('/user/:id/activate', requireAdmin, UserController.activateUserAction)
 
 router.get('/:id', AffiliateController.showAffiliateById)
+router.post('/:id', AffiliateController.showAffiliateById)
 router.post('/', AffiliateController.createAffiliateAction)
 router.get('/:id/edit', AffiliateController.editAffiliateForm)
 router.post('/:id/edit', AffiliateController.editAffiliateAction)

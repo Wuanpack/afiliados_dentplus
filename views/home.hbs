@@ -1,5 +1,31 @@
-<div class="text-center mt-5">
-  <h1 class="display-4">Bienvenido a DentPlus</h1>
-  <p class="lead">Sistema de gestión de afiliados.</p>
-  <a href="/affiliates" class="btn btn-primary btn-lg mt-3">Ver afiliados →</a>
+
+<div class="row justify-content-center py-5">
+  <div class="col-lg-8 text-center">
+    <h1 class="display-5 fw-semibold mb-3">Bienvenido a DentPlus</h1>
+    <p class="lead text-muted mb-4">
+      Sistema de gestión de afiliados, membresías y usuarios con roles ADMIN y USER.
+    </p>
+    {{#if session.userId}}
+      <div class="d-flex flex-wrap gap-2 justify-content-center">
+        <a href="/affiliates" class="btn btn-primary btn-lg">Ver afiliados</a>
+        <a href="/affiliates/create" class="btn btn-outline-primary btn-lg">Crear afiliado</a>
+      </div>
+      <p class="text-muted small mt-3 mb-0">
+        Sesión activa como
+        {{#if (eq session.role "ADMIN")}}
+          <span class="badge bg-primary">ADMIN</span>
+        {{else}}
+          <span class="badge bg-secondary">USER</span>
+        {{/if}}
+      </p>
+    {{else}}
+      <div class="d-flex flex-wrap gap-2 justify-content-center">
+        <a href="/login" class="btn btn-primary btn-lg">Iniciar sesión</a>
+        <a href="/login/register" class="btn btn-outline-secondary btn-lg">Crear cuenta</a>
+      </div>
+      <p class="text-muted small mt-3 mb-0">
+        Tras <code>yarn seed</code>: alice@example.com (USER) o bob@example.com (ADMIN), contraseña <code>123456</code>.
+      </p>
+    {{/if}}
+  </div>
 </div>

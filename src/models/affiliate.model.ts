@@ -8,6 +8,7 @@ const affiliateInclude = {
 
 const affiliateDetailInclude = {
   membershipType: true,
+  user: { select: { id: true, email: true } },
 } as const
 
 function affiliateWhere(id: number, userId?: number) {
@@ -22,7 +23,7 @@ export const getAll = (userId?: number) =>
   prisma.affiliate.findMany({
     where: listWhere(userId),
     include: affiliateInclude,
-    orderBy: { createdAt: 'desc' },
+    orderBy: { id: 'asc' },
   })
 
 export const getById = (id: number, userId?: number) =>

@@ -152,11 +152,12 @@ SESSION_SECRET=cambiar-en-produccion
 ```
 
 ### Base de datos
+* Si yarn seed no funciona, utilizar `yarn run seed`*
 
 ```bash
 npx prisma migrate dev
 npx prisma generate
-yarn seed
+yarn seed 
 # Opcional: explorar datos
 npx prisma studio
 ```
@@ -173,6 +174,7 @@ Membresías: **silver** (5%), **gold** (10%), **platinum** (20%). El seed crea a
 ---
 
 ## Scripts disponibles
+* Si los scripts no funcionan, utilizar `yarn run <script>`
 
 ```bash
 yarn dev      # Desarrollo con recarga (nodemon + ts-node) → http://localhost:3000

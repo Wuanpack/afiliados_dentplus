@@ -22,6 +22,20 @@ app.engine(
       eq: (a: unknown, b: unknown) => a == b,
       capitalize: (value: string) =>
         value ? value.charAt(0).toUpperCase() + value.slice(1) : '',
+      formatDate: (value: Date | string) => {
+        if (!value) return ''
+        return new Date(value).toLocaleDateString('es-CL', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        })
+      },
+      formatPercent: (value: number) => {
+        if (value == null || Number.isNaN(Number(value))) return ''
+        return `${Math.round(Number(value) * 100)}%`
+      },
+      roleBadgeClass: (role: string) =>
+        role === 'ADMIN' ? 'bg-primary' : 'bg-secondary',
     },
   }),
 )

@@ -2,7 +2,7 @@
 import 'dotenv/config'
 import bcrypt from 'bcryptjs'
 import { PrismaPg } from '@prisma/adapter-pg'
-import { PrismaClient } from '../generated/prisma/client'
+import { PrismaClient } from '../src/generated/prisma/client'
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! })
 const prisma = new PrismaClient ({ adapter })
@@ -14,7 +14,7 @@ async function main() {
     await prisma.membershipType.deleteMany()
     await prisma.user.deleteMany()
 
-    const hash = await bcrypt.hash('123456', 10)
+    const hash = await bcrypt.hash('12345678', 10)
 
     const users = await Promise.all([
         prisma.user.create({ data: { email: 'alice@example.com', password: hash, role: 'USER'}}),
@@ -22,7 +22,7 @@ async function main() {
     ])
 
     const count_users = await prisma.user.count()
-    console.log(`Inserted ${count_users} afilliates.`)
+    console.log(`Inserted ${count_users} users.`)
 
     const membershipTypes = await Promise.all([
         prisma.membershipType.create({ data: {name: 'silver', discount: 0.05}}),
@@ -31,7 +31,7 @@ async function main() {
     ])
 
     const count_membership = await prisma.membershipType.count()
-    console.log(`Inserted ${count_membership} afilliates.`)
+    console.log(`Inserted ${count_membership} membership types.`)
 
     const afiliados = [
         { first_name: 'Juan', last_name: 'Pérez', email: 'juan@example.com', userId: users[0].id, membershipTypeId: membershipTypes[0].id },

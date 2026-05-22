@@ -1,34 +1,72 @@
-<div class="container mt-4">
-  <a href="/affiliates" class="btn btn-outline-secondary btn-sm mb-3">← Volver al listado</a>
 
-  <h1 class="mb-3">{{affiliate.first_name}} {{affiliate.last_name}}</h1>
+<a href="/affiliates" class="btn btn-outline-secondary btn-sm mb-3">← Volver al listado</a>
 
-  <div class="card">
-    <div class="card-body">
-      <p class="card-text"><strong>Email:</strong> {{affiliate.email}}</p>
-      <p class="card-text"><strong>Membresía:</strong> {{capitalize affiliate.membershipType.name}} ({{affiliate.membershipType.discount}} descuento)</p>
-      <p class="card-text">
-        <strong>Estado:</strong>
-        {{#if affiliate.status}}
-          <span class="badge bg-success">Activo</span>
-        {{else}}
-          <span class="badge bg-danger">Inactivo</span>
-        {{/if}}
-      </p>
-      <p class="card-text"><strong>Creado:</strong> {{affiliate.createdAt}}</p>
-    </div>
+<div class="page-header">
+  <h1 class="h3 mb-1">{{affiliate.first_name}} {{affiliate.last_name}}</h1>
+  <p class="text-muted mb-0">Afiliado #{{affiliate.id}}</p>
+</div>
+
+<div class="card shadow-sm">
+  <div class="card-body">
+    <dl class="row mb-0">
+      <dt class="col-sm-3">Email</dt>
+      <dd class="col-sm-9">{{affiliate.email}}</dd>
+      <dt class="col-sm-3">Membresía</dt>
+      <dd class="col-sm-9">{{capitalize affiliate.membershipType.name}} ({{formatPercent affiliate.membershipType.discount}} de descuento)</dd>
+      {{#if isAdmin}}
+        <dt class="col-sm-3">Gestor</dt>
+        <dd class="col-sm-9">{{affiliate.user.email}}</dd>
+      {{/if}}
+      <dt class="col-sm-3">Estado</dt>
+      <dd class="col-sm-9">
+        {{#if affiliate.status}}<span class="badge bg-success">Activo</span>{{else}}<span class="badge bg-danger">Inactivo</span>{{/if}}
+      </dd>
+      <dt class="col-sm-3">Registrado</dt>
+      <dd class="col-sm-9">{{formatDate affiliate.createdAt}}</dd>
+    </dl>
   </div>
+</div>
 
-  <div class="mt-3 d-flex gap-2">
-    <a href="/affiliates/{{affiliate.id}}/edit" class="btn btn-warning">Editar</a>
-    {{#if affiliate.status}}
-      <form action="/affiliates/{{affiliate.id}}/deactivate" method="POST">
-        <button type="submit" class="btn btn-danger">Desactivar</button>
-      </form>
-    {{else}}
-      <form action="/affiliates/{{affiliate.id}}/activate" method="POST">
-        <button type="submit" class="btn btn-success">Activar</button>
-      </form>
+<div class="card shadow-sm mt-4">
+  <div class="card-body">
+    <h5 class="card-title">Simulador de descuento</h5>
+    
+    <form action="/affiliates/{{affiliate.id}}" method="POST">
+      <div class="mb-3">
+        <label for="numeroIngresado" class="form-label">Monto a calcular</label>
+        <input
+          type="number"
+          id="numeroIngresado"
+          name="numeroIngresado"
+          class="form-control{{#if errors.numeroIngresado}} is-invalid{{/if}}"
+          value="{{values.numeroIngresado}}"
+          placeholder="Ingresa un monto"
+          min="0"
+        >
+        {{#if errors.numeroIngresado}}
+          <div class="invalid-feedback">{{errors.numeroIngresado}}</div>
+        {{/if}}
+      </div>
+      <button type="submit" class="btn btn-primary">Calcular</button>
+    </form>
+
+    {{#if total}}
+      <div class="alert alert-success mt-3">
+        <strong>Total con descuento:</strong> ${{total}}
+      </div>
     {{/if}}
   </div>
+</div>
+
+<div class="mt-3 d-flex flex-wrap gap-2">
+  <a href="/affiliates/{{affiliate.id}}/edit" class="btn btn-warning">Editar</a>
+  {{#if affiliate.status}}
+    <form action="/affiliates/{{affiliate.id}}/deactivate" method="POST" onsubmit="return confirm('¿Desactivar este afiliado?')">
+      <button type="submit" class="btn btn-danger">Desactivar</button>
+    </form>
+  {{else}}
+    <form action="/affiliates/{{affiliate.id}}/activate" method="POST">
+      <button type="submit" class="btn btn-success">Activar</button>
+    </form>
+  {{/if}}
 </div>

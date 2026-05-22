@@ -3,6 +3,7 @@ import { Request, Response } from 'express'
 import * as AffiliateModel from '../models/affiliate.model'
 import * as MembershipModel from '../models/membership.model'
 import * as UserModel from '../models/user.model'
+import { simulatorSchema } from '../schemas/simulator.schemas'
 import { affiliateSchema } from '../schemas/affiliate.schemas'
 import { affiliateScope } from '../lib/affiliateScope'
 import { formatZodErrors } from '../lib/parseError'
@@ -27,13 +28,34 @@ export const index = async (req: Request, res: Response) => {
 }
 
 export const showAffiliateById = async (req: Request, res: Response) => {
-  const { scopeUserId } = affiliateScope(req)
-  const id = parseRouteId(req.params.id)
-  if (id === null) return notFoundAffiliate(res)
+    const { scopeUserId, isAdmin } = affiliateScope(req)
+    const id = parseRouteId(req.params.id)
 
-  const affiliate = await AffiliateModel.getById(id, scopeUserId)
-  if (!affiliate) return notFoundAffiliate(res)
-  res.render('affiliates/show', { affiliate })
+    if (id === null) return notFoundAffiliate(res)
+
+    const affiliate = await AffiliateModel.getById(id, scopeUserId)
+    if (!affiliate) return notFoundAffiliate(res)
+
+    // si no hay número ingresado, renderiza sin calcular
+    if (!req.body || !req.body.numeroIngresado) {
+      return res.render('affiliates/show', { affiliate, isAdmin })
+    }   
+
+    const result = simulatorSchema.safeParse(req.body)
+    if (!result.success) {
+        return res.render('affiliates/show', {
+            affiliate,
+            isAdmin,
+            errors: formatZodErrors(result.error),
+            values: req.body
+        })
+    }
+
+    const monto = result.data.numeroIngresado
+    const descuento = affiliate.membershipType.discount
+    const total = monto - (descuento * monto)
+
+    res.render('affiliates/show', { affiliate, isAdmin, total, values: req.body })
 }
 
 export const createAffiliateForm = async (_req: Request, res: Response) => {
@@ -145,3 +167,4 @@ export const activateAffiliateAction = async (req: Request, res: Response) => {
     return notFoundAffiliate(res)
   }
 }
+
