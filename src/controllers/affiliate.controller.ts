@@ -44,7 +44,7 @@ export const showAffiliateById = async (req: Request, res: Response) => {
     const result = simulatorSchema.safeParse(req.body)
     if (!result.success) {
         return res.render('affiliates/show', {
-            affiliate,
+            affiliate,  // ← ¿está aquí?
             isAdmin,
             errors: formatZodErrors(result.error),
             values: req.body

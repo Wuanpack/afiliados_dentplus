@@ -35,13 +35,12 @@
       <div class="mb-3">
         <label for="numeroIngresado" class="form-label">Monto a calcular</label>
         <input
-          type="number"
+          type="text"
           id="numeroIngresado"
           name="numeroIngresado"
           class="form-control{{#if errors.numeroIngresado}} is-invalid{{/if}}"
           value="{{values.numeroIngresado}}"
           placeholder="Ingresa un monto"
-          min="0"
         >
         {{#if errors.numeroIngresado}}
           <div class="invalid-feedback">{{errors.numeroIngresado}}</div>
