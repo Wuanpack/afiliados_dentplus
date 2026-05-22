@@ -8,7 +8,9 @@
       <div class="mb-3">
         <label for="first_name" class="form-label">Nombre</label>
         <input type="text" id="first_name" name="first_name" class="form-control{{#if errors.first_name}} is-invalid{{/if}}" value="{{affiliate.first_name}}">
-        {{#if errors.first_name}}<div class="invalid-feedback">{{errors.first_name}}</div>{{/if}}
+        {{#if errors.first_name}}<div if (!req.body || !req.body.numeroIngresado) {
+    return res.render('affiliates/show', { affiliate, isAdmin })
+}>{{errors.first_name}}</div>{{/if}}
       </div>
       <div class="mb-3">
         <label for="last_name" class="form-label">Apellido</label>
