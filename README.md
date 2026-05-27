@@ -111,6 +111,8 @@ El modelo (`affiliate.model.ts`) unifica las consultas: si `userId` viene defini
 ├── tsdown.config.ts
 ├── nodemon.json
 ├── eslint.config.mjs
+├── Dockerfile
+├── docker-compose.yml
 └── .env                         # No se sube al repositorio
 ```
 
@@ -126,6 +128,18 @@ El modelo (`affiliate.model.ts`) unifica las consultas: si `userId` viene defini
 ---
 
 ## Instalación
+
+### Instalación con Docker
+
+```bash
+git clone https://github.com/Wuanpack/afiliados_dentplus.git
+cd afiliados_dentplus
+docker compose up --build
+```
+**Requisitos**: Docker y Docker Compose instalados. No se necesita Node.js ni PostgreSQL instalados localmente.
+
+El comando `docker compose up --build` levanta automáticamente la base de datos, corre las migraciones, ejecuta el seed y arranca la app en `http://localhost:3000`.
+
 
 ```bash
 git clone https://github.com/Wuanpack/afiliados_dentplus.git
