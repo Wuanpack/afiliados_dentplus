@@ -24,20 +24,29 @@ Renderizado en servidor (SSR) con **Express**, **Handlebars**, **TypeScript**, *
 
 ## Stack tecnológico
 
-| Capa | Tecnología |
-|------|------------|
-| Runtime | Node.js 18+ |
-| Lenguaje | TypeScript |
-| Framework HTTP | Express 5 |
-| Vistas | express-handlebars |
-| Estilos | Bootstrap 5 |
-| Base de datos | PostgreSQL |
-| ORM | Prisma 7 (`@prisma/adapter-pg`) |
-| Autenticación | express-session + bcryptjs |
-| Validación | Zod 4 |
-| Build | tsdown |
-| Desarrollo | nodemon + ts-node |
-| Gestor de paquetes | Yarn |
+| Herramienta          | Versión         | Descripción                                                                                                            |
+| -------------------- | --------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| Node.js              | 18+             | Runtime utilizado para ejecutar la aplicación backend y el entorno de desarrollo del proyecto.                         |
+| TypeScript           | 6.0.3           | Lenguaje principal del proyecto, utilizado para desarrollar aplicaciones Node.js con tipado estático.                  |
+| Express              | 5.2.1           | Framework HTTP utilizado para la construcción de la aplicación web y definición de rutas, middlewares y controladores. |
+| express-handlebars   | 9.0.1           | Motor de plantillas utilizado para renderizar vistas dinámicas del lado del servidor mediante Handlebars.              |
+| Bootstrap            | 5               | Framework CSS utilizado para el diseño responsivo y la construcción de interfaces gráficas.                            |
+| PostgreSQL           | No especificada | Sistema de gestión de bases de datos relacional utilizado para la persistencia de datos del proyecto.                  |
+| pg                   | 8.20.0          | Driver oficial de PostgreSQL para Node.js, utilizado para la conexión con la base de datos.                            |
+| Prisma ORM           | 7.8.0           | ORM utilizado para modelado de datos, migraciones y consultas tipadas hacia PostgreSQL.                                |
+| `@prisma/client`     | 7.8.0           | Cliente generado automáticamente por Prisma para interactuar con la base de datos desde TypeScript.                    |
+| `@prisma/adapter-pg` | 7.8.0           | Adaptador de Prisma para integración optimizada con PostgreSQL utilizando el driver `pg`.                              |
+| express-session      | 1.19.0          | Middleware utilizado para la administración de sesiones HTTP persistentes.                                             |
+| bcryptjs             | 3.0.3           | Librería utilizada para hash y validación segura de contraseñas.                                                       |
+| Zod                  | 4.4.3           | Librería utilizada para validación de datos y definición de esquemas tipados.                                          |
+| dotenv               | 17.4.2          | Librería utilizada para cargar variables de entorno desde archivos `.env`.                                             |
+| tsdown               | 0.21.10         | Herramienta de build utilizada para compilar y empaquetar el proyecto TypeScript.                                      |
+| ts-node              | 10.9.2          | Ejecutor de TypeScript en tiempo real utilizado principalmente en desarrollo.                                          |
+| tsx                  | 4.21.0          | Runtime para ejecutar archivos TypeScript y ESM de forma rápida durante desarrollo y scripts auxiliares.               |
+| nodemon              | 3.1.14          | Herramienta de desarrollo que reinicia automáticamente la aplicación al detectar cambios en el código fuente.          |
+| Yarn                 | No especificada | Gestor de paquetes utilizado para administrar dependencias, scripts y configuración del proyecto.                      |
+| Docker               | No especificada | Plataforma utilizada para contenedorización y despliegue consistente de la aplicación.                                 |
+
 
 ---
 
@@ -118,40 +127,44 @@ El modelo (`affiliate.model.ts`) unifica las consultas: si `userId` viene defini
 
 ---
 
-## Requisitos previos
-
-- **Node.js** 18 o superior
-- **PostgreSQL** en ejecución
-- **Yarn**
-- Base de datos creada (por ejemplo `afiliados_dentplus`)
-
----
-
 ## Instalación
-
-### Instalación con Docker
 
 ```bash
 git clone https://github.com/Wuanpack/afiliados_dentplus.git
 cd afiliados_dentplus
-docker compose up --build
 ```
-**Requisitos**: Docker y Docker Compose instalados. No se necesita Node.js ni PostgreSQL instalados localmente.
 
-El comando `docker compose up --build` levanta automáticamente la base de datos, corre las migraciones, ejecuta el seed y arranca la app en `http://localhost:3000`.
+### Opción A — Docker (recomendado)
 
+**Requisitos:** Docker y Docker Compose instalados. No se necesita Node.js ni PostgreSQL localmente.
 
 ```bash
-git clone https://github.com/Wuanpack/afiliados_dentplus.git
-cd afiliados_dentplus   # o sistema-afiliados-dentplus según el nombre local
+docker compose up --build
+```
 
+Esto levanta automáticamente la base de datos, corre las migraciones, ejecuta el seed y arranca la app en `http://localhost:3000`.
+
+Para detener:
+
+```bash
+docker compose down        # detiene los contenedores
+docker compose down -v     # detiene y borra la base de datos
+```
+
+---
+
+### Opción B — Local
+
+**Requisitos:** Node.js 18+, PostgreSQL en ejecución, Yarn.
+
+```bash
 yarn install
 
 cp .env.example .env
 # Editar .env con tu DATABASE_URL y SESSION_SECRET
 ```
 
-### Variables de entorno
+#### Variables de entorno
 
 | Variable | Descripción |
 |----------|-------------|
@@ -165,16 +178,20 @@ DATABASE_URL="postgresql://postgres:postgres@localhost:5432/afiliados_dentplus"
 SESSION_SECRET=cambiar-en-produccion
 ```
 
-### Base de datos
-* Si yarn seed no funciona, utilizar `yarn run seed`*
+#### Base de datos
+
+> Si `yarn seed` no funciona, usar `yarn run seed`
 
 ```bash
 npx prisma migrate dev
 npx prisma generate
-yarn seed 
+yarn seed
+
 # Opcional: explorar datos
 npx prisma studio
 ```
+
+---
 
 ### Datos de prueba (seed)
 
@@ -188,7 +205,8 @@ Membresías: **silver** (5%), **gold** (10%), **platinum** (20%). El seed crea a
 ---
 
 ## Scripts disponibles
-* Si los scripts no funcionan, utilizar `yarn run <script>`
+
+> Si los scripts no funcionan, usar `yarn run <script>`
 
 ```bash
 yarn dev      # Desarrollo con recarga (nodemon + ts-node) → http://localhost:3000
