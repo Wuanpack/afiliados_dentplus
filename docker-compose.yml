@@ -14,7 +14,8 @@ services:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
       timeout: 5s
-      retries: 5
+      retries: 10
+      start_period: 10s
 
   app:
     build: .
@@ -29,7 +30,15 @@ services:
       db:
         condition: service_healthy
     command: >
-      sh -c "npx prisma db push && yarn seed && node dist/index.cjs"
+      sh -c "
+        echo 'Waiting for database...' &&
+        until npx prisma db push; do
+          echo 'DB not ready, retrying in 3s...'
+          sleep 3
+        done &&
+        yarn seed &&
+        node dist/index.cjs
+      "
 
 volumes:
   postgres_data:
