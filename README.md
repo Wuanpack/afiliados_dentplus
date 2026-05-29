@@ -197,8 +197,8 @@ npx prisma studio
 
 | Tipo | Email | Contraseña | Rol |
 |------|-------|------------|-----|
-| Usuario | `alice@example.com` | `123456` | USER |
-| Administrador | `bob@example.com` | `123456` | ADMIN |
+| Usuario | `alice@example.com` | `12345678` | USER |
+| Administrador | `bob@example.com` | `12345678` | ADMIN |
 
 Membresías: **silver** (5%), **gold** (10%), **platinum** (20%). El seed crea además varios afiliados de ejemplo.
 

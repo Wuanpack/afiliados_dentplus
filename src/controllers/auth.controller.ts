@@ -40,7 +40,10 @@ export const loginAction = async (req: Request, res: Response) => {
 
   req.session.userId = user.id
   req.session.role = user.role
-  res.redirect('/affiliates')
+  req.session.save((err) => {
+    if (err) return res.render('auth/login', { error: 'Error al iniciar sesión' })
+    res.redirect('/affiliates')
+  })
 }
 
 export const registerForm = (_req: Request, res: Response) => {
@@ -72,7 +75,10 @@ export const registerAction = async (req: Request, res: Response) => {
     const user = await UserModel.create({ email, password: hash })
     req.session.userId = user.id
     req.session.role = user.role
-    res.redirect('/affiliates')
+    req.session.save((err) => {
+      if (err) return res.render('auth/login', { error: 'Error al iniciar sesión' })
+      res.redirect('/affiliates')
+    })
   } catch (error) {
     if (isUniqueConstraintError(error)) {
       return res.render('auth/register', {
