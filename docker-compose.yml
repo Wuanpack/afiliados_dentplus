@@ -5,9 +5,9 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: products_db
+      POSTGRES_DB: afiliados_dentplus
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -29,16 +29,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    command: >
-      sh -c "
-        echo 'Waiting for database...' &&
-        until npx prisma db push; do
-          echo 'DB not ready, retrying in 3s...'
-          sleep 3
-        done &&
-        yarn seed &&
-        node dist/index.cjs
-      "
+    command: sh -c "until npx prisma db push; do echo 'DB not ready, retrying in 3s...' && sleep 3; done && yarn seed && node dist/index.cjs"
 
 volumes:
   postgres_data:
