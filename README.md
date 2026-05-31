@@ -367,6 +367,9 @@ Los errores se muestran en la misma vista mediante `formatZodErrors`.
 
 ---
 
-## Licencia
+## Autor
 
-Proyecto académico — consultar al autor del repositorio para uso y distribución.
+- Nombre: Alonso García Espinoza
+- Institución: IP San Sebastián
+- Ramo: Desarrollo de Software Web I - Evaluación Unidad 2
+- Docente: Boris Belmar Muñoz
