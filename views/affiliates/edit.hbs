@@ -4,7 +4,7 @@
 <div class="row justify-content-center">
   <div class="col-lg-7">
     <h1 class="h3 mb-4">Editar: {{affiliate.first_name}} {{affiliate.last_name}}</h1>
-    <form action="/affiliates/{{affiliate.id}}/edit" method="POST" class="card card-body shadow-sm">
+    <form action="/affiliates/{{affiliate.id}}/edit" method="POST" class="card card-body shadow-sm" novalidate>
       <div class="mb-3">
         <label for="first_name" class="form-label">Nombre</label>
         <input type="text" id="first_name" name="first_name" class="form-control{{#if errors.first_name}} is-invalid{{/if}}" value="{{affiliate.first_name}}">

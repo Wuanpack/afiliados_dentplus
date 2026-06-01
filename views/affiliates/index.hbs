@@ -41,11 +41,11 @@
                 <a href="/affiliates/{{this.id}}" class="btn btn-sm btn-outline-secondary">Ver</a>
                 <a href="/affiliates/{{this.id}}/edit" class="btn btn-sm btn-outline-warning">Editar</a>
                 {{#if this.status}}
-                  <form action="/affiliates/{{this.id}}/deactivate" method="POST" class="d-inline" onsubmit="return confirm('¿Desactivar este afiliado?')">
+                  <form action="/affiliates/{{this.id}}/deactivate" method="POST" class="d-inline" onsubmit="return confirm('¿Desactivar este afiliado?')" novalidate>
                     <button type="submit" class="btn btn-sm btn-outline-danger">Desactivar</button>
                   </form>
                 {{else}}
-                  <form action="/affiliates/{{this.id}}/activate" method="POST" class="d-inline">
+                  <form action="/affiliates/{{this.id}}/activate" method="POST" class="d-inline" novalidate>
                     <button type="submit" class="btn btn-sm btn-outline-success">Activar</button>
                   </form>
                 {{/if}}
